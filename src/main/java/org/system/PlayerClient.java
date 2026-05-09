@@ -11,9 +11,10 @@ import io.netty.util.CharsetUtil;
 import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
-import java.util.Scanner;
 
 public class PlayerClient {
+    private static InetSocketAddress serverAddress;
+    private static Channel channel;
     public static void start() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -29,32 +30,27 @@ public class PlayerClient {
                         }
                     });
 
-            Channel channel = b.bind(0).sync().channel();
+            channel = b.bind(0).sync().channel();
 
-            InetSocketAddress serverAddress = new InetSocketAddress("localhost", 8080);
+            serverAddress = new InetSocketAddress("localhost", 8080);
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("UDP Client started. Type a message:");
+            System.out.println("UDP Client started.");
 
-            while (true) {
-                String line = scanner.nextLine();
-                if ("exit".equalsIgnoreCase(line)) {
-                    break;
-                }
-
-                ByteBuf buf = Unpooled.copiedBuffer(line, CharsetUtil.UTF_8);
-
-                // Send the packet
-                channel.writeAndFlush(new DatagramPacket(buf, serverAddress)).addListener(future -> {
-                    if (!future.isSuccess()) {
-                        System.err.println("Failed to send packet: " + future.cause());
-                    }
-                });
-            }
+            channel.closeFuture().await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             group.shutdownGracefully();
+        }
+    }
+
+    public static void sendMessage(String message) {
+        if (channel != null && channel.isActive()) {
+            ByteBuf buf = Unpooled.copiedBuffer(message, CharsetUtil.UTF_8);
+            channel.writeAndFlush(new DatagramPacket(buf, serverAddress));
+            System.out.println("Sent to server: " + message);
+        } else {
+            System.err.println("Cannot send: Channel is not active.");
         }
     }
 }

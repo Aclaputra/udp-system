@@ -24,6 +24,8 @@ public class Game {
             @Override
             public void actionPerformed(ActionEvent e) {
                 label.setText("Button clicked!");
+
+                PlayerClient.sendMessage("PLAYER_CLICKED");
             }
         });
 

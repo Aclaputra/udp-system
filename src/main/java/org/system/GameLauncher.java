@@ -14,8 +14,11 @@ public class GameLauncher {
             PlayerServer.start();
         } else if (mode.equals("client")) {
             System.out.println("Starting in client mode...");
-            new Thread(() -> PlayerClient.start()).start();
-            System.out.println("Network started... now launching GUI");
+
+            Thread nettyThread = new Thread(PlayerClient::start);
+            nettyThread.setDaemon(true);
+            nettyThread.start();
+
             Game.start();
         } else {
             System.out.println("Unknown code: " + mode);

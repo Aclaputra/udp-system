@@ -18,7 +18,6 @@ public class PlayerServerHandler extends SimpleChannelInboundHandler<DatagramPac
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
         InetSocketAddress sender = packet.sender();
-        String msg = packet.content().toString();
 
         ByteBuf buf = packet.content();
         String message = buf.toString(CharsetUtil.UTF_8);
