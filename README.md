@@ -25,6 +25,17 @@ v0.02
 - Second GUI will appear now join a server
 - Try Clicking Click me button it will sending messages between each other through terminals with different IP
 
+v0.03
+- Build the project & the jar
+- Open 2 Separated terminals
+- First terminal run `java -jar <jarname>.jar game` to start a game
+- GUI will appear then click host a server also click join a server
+- Welcome to the Lobby Panel will appear (choose Start Game to get into the game)
+- Now we're in the Game, click the Button and see the message been send to the UDP Network by monitor it through Terminal logs
+- Next we need another player of course, open another terminal and do the same thing without Host a server again.
+- After you Joined and start the game, Click the button it will send our Action data packets between players.
+- Basic things applied, now just do some creativity fellas.
+
 # Notes
 - UDP uses DatagramPacket while TCP use simpler way to send messages without packets.
 - UDP only need one group Bootstrap while TCP need bossGroup and the workerGroup with ServerBootstrap the differences
